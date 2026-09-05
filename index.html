@@ -2022,7 +2022,8 @@ addEventListener("hashchange",show);show()})();
     };
     if (route() !== page) { location.hash = "#" + page; setTimeout(go, 350); } else go();
   }
-  document.addEventListener("click", (e) => { if (sheet && !e.target.closest(".rv-sheet,.rv-notes-btn")) closeSheet(); });
+  // Opening the list re-renders the button, which detaches the click's target - ignore those.
+  document.addEventListener("click", (e) => { if (!document.contains(e.target)) return; if (sheet && !e.target.closest(".rv-sheet,.rv-notes-btn")) closeSheet(); });
 
   // ---------- fab ----------
   if (cfg.endpoint) {
@@ -2031,7 +2032,7 @@ addEventListener("hashchange",show);show()})();
     fab.addEventListener("click", () => picking ? stopPick() : startPick());
     document.body.appendChild(fab);
   }
-  document.addEventListener("click", (e) => { if (panel && !e.target.closest(".rv-panel,.rv-pin")) closePanel(); });
+  document.addEventListener("click", (e) => { if (!document.contains(e.target)) return; if (panel && !e.target.closest(".rv-panel,.rv-pin")) closePanel(); });
 
   // ---------- toast + inert outside links ----------
   function toast(msg, ms = 4500){
